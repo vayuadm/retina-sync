@@ -22,10 +22,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @SpringBootApplication
 @EnableConfigurationProperties(ServiceProperties.class)
-public class SampleActuatorNoWebApplication {
+public class RetinaSyncApplication {
 
-	public static void main(String[] args) throws Exception {
-		SpringApplication.run(SampleActuatorNoWebApplication.class, args);
-	}
+    public static void main(String[] args) throws Exception {
 
+        SpringApplication.run(RetinaSyncApplication.class, args);
+    }
 }

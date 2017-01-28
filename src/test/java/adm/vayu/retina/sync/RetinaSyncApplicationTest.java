@@ -27,15 +27,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Basic integration tests for service demo application.
- *
- * @author Dave Syer
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @DirtiesContext
-public class SampleActuatorNoWebApplicationTests {
+public class RetinaSyncApplicationTest {
 
 	@Autowired
 	private MetricsEndpoint endpoint;
