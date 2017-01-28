@@ -11,6 +11,7 @@
 	<artifactId>retina-sync</artifactId>
 	<name>Retina Synchronize</name>
 	<description>Sync ALM Trello</description>
+	<version>0.1.0</version>
 
 	<properties>
 		<main.basedir>${basedir}/../..</main.basedir>
