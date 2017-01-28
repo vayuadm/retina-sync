@@ -1,0 +1,26 @@
+machine:
+  # pre section is a workaround for https://discuss.circleci.com/t/unable-to-use-docker-cp-but-it-worked-2-days-ago/1137/9
+  pre:
+    - echo 'DOCKER_OPTS="-s btrfs -e lxc -D --userland-proxy=false"' | sudo tee -a /etc/default/docker
+    - sudo curl -L -o /usr/bin/docker 'https://s3-external-1.amazonaws.com/circle-downloads/docker-1.9.1-circleci-cp-workaround'
+    - sudo chmod 0755 /usr/bin/docker
+  environment:
+    IMAGE_NAME: vayuadm/retina-sync
+    TEST_RESULTS_FOLDER: $CIRCLE_TEST_REPORTS/surefire/
+  services:
+    - docker
+dependencies:
+  override:
+    - docker run -it --rm -v "$PWD":/usr/src/maven -w /usr/src/maven maven:3.3.9-jdk-8 mvn clean install
+    - docker build -t $IMAGE_NAME .
+test:
+  override:
+    - mkdir -p $TEST_RESULTS_FOLDER
+    - find . -type f -regex ".*/target/surefire-reports/.*Test.*xml" -exec cp {} $TEST_RESULTS_FOLDER \;
+deployment:
+  continuous:
+    branch: [master, develop, /feature_.*/]
+    commands:
+      # deploy image to DockerHub
+      - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+      - docker push $IMAGE_NAME
