@@ -9,14 +9,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ConfigurationTest {
+public class RetinaSyncPropertiesTest {
 
     @Autowired
-    private Configuration config;
+    private RetinaSyncProperties _config;
 
     @Test
     public void getAlmUser() {
 
-        Assert.assertFalse(config.getAlmUser().isEmpty());
+        Assert.assertFalse(_config.getAlmUser().isEmpty());
     }
 }
