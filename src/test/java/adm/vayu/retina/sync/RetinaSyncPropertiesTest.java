@@ -2,21 +2,16 @@ package adm.vayu.retina.sync;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class RetinaSyncPropertiesTest {
+public class RetinaSyncPropertiesTest extends RetinaSyncTestCase {
 
     @Autowired
-    private RetinaSyncProperties _config;
+    private RetinaSyncProperties _properties;
 
     @Test
-    public void getAlmUser() {
+    public void testGetAlmUser() {
 
-        Assert.assertFalse(_config.getAlmUser().isEmpty());
+        Assert.assertFalse(_properties.getAlmUser().isEmpty());
     }
 }
