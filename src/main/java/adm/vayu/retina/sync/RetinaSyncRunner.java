@@ -6,26 +6,60 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 @Service
 public class RetinaSyncRunner {
 
     private static final Logger _logger = LoggerFactory.getLogger(RetinaSyncRunner.class);
-
+    ReentrantLock _locker = new ReentrantLock();
     @Autowired
     private RetinaSyncProperties _properties;
     private Thread _syncThread = null;
     private volatile boolean _stopped = false;
 
-    public synchronized boolean start() {
+    public boolean start() {
 
         boolean ret = false;
-        if (_syncThread == null) {
-            _syncThread = new Thread(() -> doStart());
-            _syncThread.start();
-            ret = true;
+        _logger.debug("Starting retina sync runner...");
+        _locker.lock();
+        try {
+            if (_syncThread == null) {
+                _syncThread = new Thread(() -> doStart());
+                _syncThread.start();
+                ret = true;
+            }
+        } finally {
+            _locker.unlock();
         }
 
+
         return ret;
+    }
+
+    public void stop() {
+
+        _logger.debug("Stopping retina sync runner...");
+        _stopped = true;
+        _locker.lock();
+        try {
+            if (_syncThread != null) {
+                _syncThread.interrupt();
+                try {
+                    final int STOP_TIMEOUT = 5000;
+                    _syncThread.join(STOP_TIMEOUT);
+                } catch (InterruptedException e) {
+                    throw new RetinaSyncException(e);
+                } finally {
+                    if (_syncThread.isAlive()) {
+                        _logger.warn("Controller thread did not stopped");
+                    }
+                    _syncThread = null;
+                }
+            }
+        } finally {
+            _locker.unlock();
+        }
     }
 
     private void doStart() {
@@ -49,26 +83,6 @@ public class RetinaSyncRunner {
             Thread.sleep(sleepTime);
         } catch (InterruptedException e) {
             _logger.error("Retina sync thread interrupted while sleeping", e);
-        }
-    }
-
-    public void stop() {
-
-        _logger.debug("Stopping retina sync runner...");
-        _stopped = true;
-        if (_syncThread != null) {
-            _syncThread.interrupt();
-            try {
-                final int STOP_TIMEOUT = 5000;
-                _syncThread.join(STOP_TIMEOUT);
-            } catch (InterruptedException e) {
-                throw new RetinaSyncException(e);
-            } finally {
-                if (_syncThread.isAlive()) {
-                    _logger.warn("Controller thread did not stopped");
-                }
-                _syncThread = null;
-            }
         }
     }
 }
