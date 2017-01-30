@@ -12,20 +12,25 @@ import java.util.concurrent.locks.ReentrantLock;
 public class RetinaSyncRunner {
 
     private static final Logger _logger = LoggerFactory.getLogger(RetinaSyncRunner.class);
-    ReentrantLock _locker = new ReentrantLock();
-    @Autowired
+    private ReentrantLock _locker = new ReentrantLock();
     private RetinaSyncProperties _properties;
     private Thread _syncThread = null;
     private volatile boolean _stopped = false;
 
-    public boolean start() {
+    @Autowired
+    public RetinaSyncRunner(RetinaSyncProperties properties) {
+
+        _properties = properties;
+    }
+
+    boolean start() {
 
         boolean ret = false;
         _logger.debug("Starting retina sync runner...");
         _locker.lock();
         try {
             if (_syncThread == null) {
-                _syncThread = new Thread(() -> doStart());
+                _syncThread = new Thread(this::doStart);
                 _syncThread.start();
                 ret = true;
             }
@@ -37,7 +42,7 @@ public class RetinaSyncRunner {
         return ret;
     }
 
-    public void stop() {
+    void stop() {
 
         _logger.debug("Stopping retina sync runner...");
         _stopped = true;
