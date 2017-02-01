@@ -1,9 +1,9 @@
 package adm.vayu.retina.sync;
 
 import adm.vayu.retina.sync.common.RetinaSyncException;
+import adm.vayu.retina.sync.trello.Trello;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -12,15 +12,17 @@ import java.util.concurrent.locks.ReentrantLock;
 public class RetinaSyncRunner {
 
     private static final Logger _logger = LoggerFactory.getLogger(RetinaSyncRunner.class);
-    private ReentrantLock _locker = new ReentrantLock();
-    private RetinaSyncProperties _properties;
+
+    private final ReentrantLock _locker = new ReentrantLock();
+    private final RetinaSyncProperties _properties;
+    private final Trello _trello;
     private Thread _syncThread = null;
     private volatile boolean _stopped = false;
 
-    @Autowired
-    public RetinaSyncRunner(RetinaSyncProperties properties) {
+    public RetinaSyncRunner(RetinaSyncProperties properties, Trello trello) {
 
         _properties = properties;
+        _trello = trello;
     }
 
     boolean start() {
@@ -71,7 +73,7 @@ public class RetinaSyncRunner {
 
         while (!_stopped) {
             try {
-                // TrelloSync.update(ALMSync.getEntities(getConnection()));
+                _trello.update(null);  //ALMSync.getEntities(getConnection()));
             } catch (Exception e) {
                 _logger.error("Failed to update Trello", e);
             } finally {

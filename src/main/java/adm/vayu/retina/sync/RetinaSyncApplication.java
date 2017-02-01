@@ -16,21 +16,14 @@
 
 package adm.vayu.retina.sync;
 
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RetinaSyncApplication implements CommandLineRunner {
+public class RetinaSyncApplication {
 
     public static void main(String[] args) throws Exception {
 
         SpringApplication.run(RetinaSyncApplication.class, args);
-    }
-
-    @Override
-    public void run(String... args) {
-
-        System.out.println("effi aaa bbb  000000");
     }
 }

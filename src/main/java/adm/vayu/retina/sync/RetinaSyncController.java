@@ -9,8 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/retina-sync/")
 public class RetinaSyncController {
 
-    @Autowired
     private RetinaSyncRunner _runner;
+
+    public RetinaSyncController(RetinaSyncRunner runner) {
+
+        _runner = runner;
+    }
 
     @RequestMapping("start")
     public String start() {
