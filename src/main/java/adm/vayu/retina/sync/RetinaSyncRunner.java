@@ -1,11 +1,14 @@
 package adm.vayu.retina.sync;
 
+import adm.vayu.retina.sync.alm.Alm;
 import adm.vayu.retina.sync.common.RetinaSyncException;
+import adm.vayu.retina.sync.data.Connection;
 import adm.vayu.retina.sync.trello.Trello;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Service
@@ -14,15 +17,24 @@ public class RetinaSyncRunner {
     private static final Logger _logger = LoggerFactory.getLogger(RetinaSyncRunner.class);
 
     private final ReentrantLock _locker = new ReentrantLock();
-    private final RetinaSyncProperties _properties;
+    private final Alm _alm;
     private final Trello _trello;
+    private final RetinaSyncProperties _properties;
+    private Connection _connection;
     private Thread _syncThread = null;
     private volatile boolean _stopped = false;
 
-    public RetinaSyncRunner(RetinaSyncProperties properties, Trello trello) {
+    private RetinaSyncRunner(Alm alm, Trello trello, RetinaSyncProperties properties) {
 
-        _properties = properties;
+        _alm = alm;
         _trello = trello;
+        _properties = properties;
+    }
+
+    @PostConstruct
+    private void initialize() {
+
+        _connection = ConnectionFactory.create(_properties);
     }
 
     boolean start() {
@@ -73,7 +85,7 @@ public class RetinaSyncRunner {
 
         while (!_stopped) {
             try {
-                _trello.update(null);  //ALMSync.getEntities(getConnection()));
+                _trello.update(_alm.getCandidtes(_connection));
             } catch (Exception e) {
                 _logger.error("Failed to update Trello", e);
             } finally {
