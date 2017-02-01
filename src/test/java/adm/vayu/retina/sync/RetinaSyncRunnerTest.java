@@ -13,15 +13,17 @@ public class RetinaSyncRunnerTest extends RetinaSyncTestCase {
 
     @Autowired
     private RetinaSyncRunner _runner;
-
     @MockBean
     private Trello _trello;
 
     @Test
-    public void testStart() {
+    public void testStart() throws Exception {
 
         given(_trello.update(Mockito.anyListOf(Entity.class))).will(candidates -> null);
+
         _runner.start();
         _runner.stop();
+
+        Mockito.verify(_trello).update((Mockito.anyListOf(Entity.class)));
     }
 }
