@@ -85,7 +85,7 @@ public class RetinaSyncRunner {
 
         while (!_stopped) {
             try {
-                _trello.update(_alm.getCandidtes(_connection));
+                _trello.update(_alm.getCandidates(_connection));
             } catch (Exception e) {
                 _logger.error("Failed to update Trello", e);
             } finally {

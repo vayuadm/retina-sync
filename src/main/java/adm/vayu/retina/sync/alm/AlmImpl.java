@@ -8,7 +8,7 @@ import java.util.List;
 public class AlmImpl implements Alm {
 
     @Override
-    public List<Entity> getCandidtes(Connection connection) {
+    public List<Entity> getCandidates(Connection connection) {
 
         return null;
     }

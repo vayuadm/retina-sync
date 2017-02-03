@@ -27,7 +27,7 @@ public class RetinaSyncRunnerTest extends RetinaSyncTestCase {
     @Test
     public void testStart() throws Exception {
 
-        given(_alm.getCandidtes(Mockito.any(Connection.class))).willReturn(new ArrayList<>());
+        given(_alm.getCandidates(Mockito.any(Connection.class))).willReturn(new ArrayList<>());
         given(_trello.update(Mockito.anyListOf(Entity.class))).willAnswer(
                 invocationOnMock -> {
                     _semaphore.release();
@@ -38,7 +38,7 @@ public class RetinaSyncRunnerTest extends RetinaSyncTestCase {
         _semaphore.tryAcquire();
         _runner.stop();
 
-        Mockito.verify(_alm).getCandidtes(Mockito.any(Connection.class));
+        Mockito.verify(_alm).getCandidates(Mockito.any(Connection.class));
         Mockito.verify(_trello).update(Mockito.anyListOf(Entity.class));
     }
 }

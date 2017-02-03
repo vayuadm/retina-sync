@@ -6,6 +6,7 @@ class TrelloUrlBuilder {
 
     private static final String KEY_QUERY_PARAM = "key=";
     private static final String TOKEN_QUERY_PARAM = "&token=";
+
     private final String _apiKey;
     private final String _token;
 

@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface Alm {
 
-    List<Entity> getCandidtes(Connection connection);
+    List<Entity> getCandidates(Connection connection);
 }
