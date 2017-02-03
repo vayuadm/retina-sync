@@ -10,14 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.CountDownLatch;
 
 import static org.mockito.BDDMockito.given;
 
 public class RetinaSyncRunnerTest extends RetinaSyncTestCase {
 
-    private final Semaphore _semaphore = new Semaphore(1);
+    private CountDownLatch _latch = new CountDownLatch(1);
     @Autowired
     private RetinaSyncRunner _runner;
     @MockBean
@@ -28,15 +27,15 @@ public class RetinaSyncRunnerTest extends RetinaSyncTestCase {
     @Test
     public void testStart() throws Exception {
 
-        given(_alm.getCandidates(Mockito.any(Connection.class))).willReturn(null);
+        given(_alm.getCandidates(Mockito.any(Connection.class))).willReturn(new ArrayList<>());
         given(_trello.update(Mockito.any())).willAnswer(
                 invocationOnMock -> {
-                    _semaphore.release();
+                    _latch.countDown();
                     return null;
                 });
 
         _runner.start();
-        _semaphore.tryAcquire(10, TimeUnit.SECONDS);
+        _latch.await();
         _runner.stop();
 
         Mockito.verify(_alm).getCandidates(Mockito.any(Connection.class));
