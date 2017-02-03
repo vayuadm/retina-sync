@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 import static org.mockito.BDDMockito.given;
 
@@ -27,15 +28,15 @@ public class RetinaSyncRunnerTest extends RetinaSyncTestCase {
     @Test
     public void testStart() throws Exception {
 
-        given(_alm.getCandidates(Mockito.any(Connection.class))).willReturn(new ArrayList<>());
-        given(_trello.update(Mockito.anyListOf(Entity.class))).willAnswer(
+        given(_alm.getCandidates(Mockito.any(Connection.class))).willReturn(null);
+        given(_trello.update(Mockito.any())).willAnswer(
                 invocationOnMock -> {
                     _semaphore.release();
                     return null;
                 });
 
         _runner.start();
-        _semaphore.tryAcquire();
+        _semaphore.tryAcquire(10, TimeUnit.SECONDS);
         _runner.stop();
 
         Mockito.verify(_alm).getCandidates(Mockito.any(Connection.class));
