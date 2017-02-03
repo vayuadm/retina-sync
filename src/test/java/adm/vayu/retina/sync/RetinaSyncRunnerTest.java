@@ -16,13 +16,13 @@ import static org.mockito.BDDMockito.given;
 
 public class RetinaSyncRunnerTest extends RetinaSyncTestCase {
 
+    private final Semaphore _semaphore = new Semaphore(1);
     @Autowired
     private RetinaSyncRunner _runner;
     @MockBean
     private Alm _alm;
     @MockBean
     private Trello _trello;
-    private Semaphore _semaphore = new Semaphore(1);
 
     @Test
     public void testStart() throws Exception {
