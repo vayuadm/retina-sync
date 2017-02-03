@@ -2,7 +2,6 @@ package adm.vayu.retina.sync.trello;
 
 class TrelloUrlBuilder {
 
-    private static final String TRELLO_BASE_URL = "";
     private static final String BOARD_CARDS = "/boards/%1$s/cards";
 
     private static final String KEY_QUERY_PARAM = "key=";
@@ -23,7 +22,7 @@ class TrelloUrlBuilder {
 
     private String build(String urlSuffix, String... params) {
 
-        return String.format("https://api.trello.com/1%s?%s",
+        return String.format("https://api.trello.com/1%1$s?%2$s",
                 String.format(urlSuffix, (Object[]) params),
                 createAuthQueryString());
     }
