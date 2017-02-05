@@ -19,8 +19,8 @@ class TrelloObjectFactory {
     private static final Charset UTF_8_CHAR_SET = Charset.forName("UTF-8");
     private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss";
 
-    private final JsonParser parser = new JsonParser();
-    private Gson gson = null;
+    private final JsonParser _parser = new JsonParser();
+    private Gson _gson = null;
 
     @SuppressWarnings("unchecked")
     <T> T createObject(TypeToken<T> typeToken, InputStream jsonContent) {
@@ -35,7 +35,7 @@ class TrelloObjectFactory {
     private JsonElement unmarshallToJson(InputStream jsonContent) {
 
         try {
-            JsonElement element = parser.parse(new InputStreamReader(
+            JsonElement element = _parser.parse(new InputStreamReader(
                     jsonContent,
                     UTF_8_CHAR_SET));
             if (element.isJsonObject()) {
@@ -61,8 +61,8 @@ class TrelloObjectFactory {
 
     private Gson getGson() {
 
-        if (gson == null) {
-            gson = new GsonBuilder()
+        if (_gson == null) {
+            _gson = new GsonBuilder()
                     .setDateFormat(DATE_FORMAT)
                     .registerTypeAdapter(
                             TrelloBoard.PERMISSION_TYPE.class,
@@ -73,7 +73,7 @@ class TrelloObjectFactory {
                     .create();
         }
 
-        return gson;
+        return _gson;
     }
 
     private void closeStream(InputStream is) {

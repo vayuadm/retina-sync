@@ -14,14 +14,15 @@ public enum TrelloType {
     TrelloType() {
     }
 
-    public static TrelloType fromString(String str) {
+    public static TrelloType fromString(String type) {
 
-        TrelloType type = TrelloType.UNKNOWN;
+        TrelloType ret = TrelloType.UNKNOWN;
         try {
-            type = TrelloType.valueOf(str.toUpperCase());
+            ret = TrelloType.valueOf(type.toUpperCase());
         } catch (Exception e) {
             // do nothing
         }
-        return type;
+
+        return ret;
     }
 }
