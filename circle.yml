@@ -17,6 +17,8 @@ test:
   override:
     - mkdir -p $TEST_RESULTS_FOLDER
     - find . -type f -regex ".*/target/surefire-reports/.*Test.*xml" -exec cp {} $TEST_RESULTS_FOLDER \;
+  post:
+    - bash <(curl -s https://codecov.io/bash)
 deployment:
   continuous:
     branch: [master, develop, /feature_.*/]
