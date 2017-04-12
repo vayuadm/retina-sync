@@ -1,7 +1,9 @@
 package adm.vayu.retina.sync.trello.data;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TrelloCard extends TrelloObject {
 
@@ -82,6 +84,7 @@ public class TrelloCard extends TrelloObject {
     }
 
     public String getUrl() {
+
         return url;
     }
 
@@ -191,5 +194,14 @@ public class TrelloCard extends TrelloObject {
         public void setName(String name) {
             this.name = name;
         }
+    }
+
+    public Map<String,String> toMap() {
+
+        Map<String,String> ret = new HashMap<>() ;
+        ret.put("name", getName());
+        ret.put("idList", getIdList());
+
+        return ret;
     }
 }
