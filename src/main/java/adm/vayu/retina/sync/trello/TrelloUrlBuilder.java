@@ -1,8 +1,13 @@
 package adm.vayu.retina.sync.trello;
 
+import adm.vayu.retina.sync.trello.data.TrelloCard;
+
+import java.util.Map;
+
 class TrelloUrlBuilder {
 
     private static final String BOARD_CARDS = "/boards/%1$s/cards";
+    private static final String CARDS = "/cards";
 
     private static final String KEY_QUERY_PARAM = "key=";
     private static final String TOKEN_QUERY_PARAM = "&token=";
@@ -18,23 +23,39 @@ class TrelloUrlBuilder {
 
     String boardCards(String boardId) {
 
-        return build(BOARD_CARDS, boardId);
+        return build(BOARD_CARDS, new String[]{boardId});
     }
 
-    private String build(String urlSuffix, String... params) {
+    String createCard(TrelloCard card) {
+
+        return build(CARDS, null, card.toMap());
+    }
+
+    private String build(String urlSuffix, String[] params) {
+
+        return build(urlSuffix, params, null);
+    }
+
+    private String build(String urlSuffix, String[] params, Map<String, String> query) {
 
         return String.format("https://api.trello.com/1%1$s?%2$s",
-                String.format(urlSuffix, (Object[]) params),
-                createAuthQueryString());
+                params == null ? urlSuffix : String.format(urlSuffix, (Object[]) params),
+                createQueryString(query));
     }
 
-    private String createAuthQueryString() {
+    private String createQueryString(Map<String, String> query) {
 
-        StringBuilder sb = new StringBuilder(KEY_QUERY_PARAM).append(_apiKey);
+        StringBuilder ret = new StringBuilder(KEY_QUERY_PARAM).append(_apiKey);
         if (_token != null) {
-            sb.append(TOKEN_QUERY_PARAM).append(_token);
+            ret.append(TOKEN_QUERY_PARAM).append(_token);
         }
 
-        return sb.toString();
+        if (query != null) {
+            for (Map.Entry<String, String> currEntry : query.entrySet()) {
+                ret.append(String.format("&%s=%s", currEntry.getKey(), currEntry.getValue()));
+            }
+        }
+
+        return ret.toString();
     }
 }
