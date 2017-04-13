@@ -3,8 +3,6 @@ package adm.vayu.retina.sync.trello;
 import adm.vayu.retina.sync.trello.data.TrelloCard;
 import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,8 +30,6 @@ public class TrelloUrlBuilderTest {
         card.setIdList(CARD_IDLIST);
 
         Set<String> expectedParams = new HashSet<>();
-        expectedParams.add(CARD_IDLIST);
-        expectedParams.add(CARD_NAME);
         expectedParams.add(KEY);
         expectedParams.add(TOKEN);
 
