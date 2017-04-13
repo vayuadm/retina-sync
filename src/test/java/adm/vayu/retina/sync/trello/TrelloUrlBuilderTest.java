@@ -3,6 +3,8 @@ package adm.vayu.retina.sync.trello;
 import adm.vayu.retina.sync.trello.data.TrelloCard;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.HashSet;
 import java.util.Set;

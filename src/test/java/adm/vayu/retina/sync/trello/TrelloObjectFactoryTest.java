@@ -4,6 +4,8 @@ import adm.vayu.retina.sync.trello.data.TrelloCard;
 import com.google.gson.reflect.TypeToken;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.Collections;
 import java.util.List;
