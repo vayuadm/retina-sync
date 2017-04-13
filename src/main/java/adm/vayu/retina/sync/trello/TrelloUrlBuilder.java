@@ -2,8 +2,6 @@ package adm.vayu.retina.sync.trello;
 
 import adm.vayu.retina.sync.trello.data.TrelloCard;
 
-import java.util.Map;
-
 class TrelloUrlBuilder {
 
     private static final String BOARD_CARDS = "/boards/%1$s/cards";
@@ -23,37 +21,26 @@ class TrelloUrlBuilder {
 
     String boardCards(String boardId) {
 
-        return build(BOARD_CARDS, new String[]{boardId});
+        return build(BOARD_CARDS, boardId);
     }
 
     String createCard(TrelloCard card) {
 
-        return build(CARDS, null, card.toMap());
+        return build(CARDS);
     }
 
-    private String build(String urlSuffix, String[] params) {
-
-        return build(urlSuffix, params, null);
-    }
-
-    private String build(String urlSuffix, String[] params, Map<String, String> query) {
+    private String build(String urlSuffix, String... params) {
 
         return String.format("https://api.trello.com/1%1$s?%2$s",
                 params == null ? urlSuffix : String.format(urlSuffix, (Object[]) params),
-                createQueryString(query));
+                createQueryString());
     }
 
-    private String createQueryString(Map<String, String> query) {
+    private String createQueryString() {
 
         StringBuilder ret = new StringBuilder(KEY_QUERY_PARAM).append(_apiKey);
         if (_token != null) {
             ret.append(TOKEN_QUERY_PARAM).append(_token);
-        }
-
-        if (query != null) {
-            for (Map.Entry<String, String> currEntry : query.entrySet()) {
-                ret.append(String.format("&%s=%s", currEntry.getKey(), currEntry.getValue()));
-            }
         }
 
         return ret.toString();

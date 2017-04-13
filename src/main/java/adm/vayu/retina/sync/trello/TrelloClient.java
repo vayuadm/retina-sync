@@ -31,4 +31,11 @@ public class TrelloClient {
                 new TypeToken<List<TrelloCard>>() {
                 }, _httpClient.get(_urlBuilder.boardCards(boardId)));
     }
+
+    void createCards(List<TrelloCard> cards) {
+
+        for (TrelloCard currCard : cards) {
+            _httpClient.post(_urlBuilder.createCard(currCard), currCard.toMap());
+        }
+    }
 }
